@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini API Web App (Aman)</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #result { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            white-space: pre-wrap; /* Mempertahankan format teks (baris baru) */
+            background-color: #f9f9f9;
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 Gemini AI Chat (via Server Proxy)</h1>
+    <p>Pastikan `server.js` sudah berjalan di port 3000.</p>
+    <hr>
+    
+    <input type="text" id="promptInput" placeholder="Tulis perintah AI Anda di sini..." autofocus>
+    <button onclick="kirimPerintah()">Kirim ke AI</button>
+    
+    <div id="result">
+        Menunggu perintah...
+    </div>
+
+    <script>
+        // CLIENT-SIDE JAVASCRIPT
+        const PROXY_URL = 'http://localhost:3000/generate'; 
+
+        async function kirimPerintah() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!prompt) {
+                resultDiv.textContent = '❗ Mohon masukkan perintah sebelum mengirim.';
+                return;
+            }
+
+            resultDiv.innerHTML = '🔄 Sedang memproses... Mohon tunggu.';
+            document.getElementById('promptInput').disabled = true;
+            document.querySelector('button').disabled = true;
+
+            try {
+                // Panggil endpoint server proxy yang kita buat
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt: prompt })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Tampilkan hasil AI
+                    resultDiv.innerHTML = `<strong>✨ Respons Gemini:</strong>\n${data.text}`;
+                } else {
+                    // Tampilkan error dari server
+                    resultDiv.innerHTML = `<strong>❌ Error Server:</strong> ${data.error || 'Terjadi kesalahan tidak terduga.'}`;
+                }
+
+            } catch (error) {
+                console.error('Fetch error:', error);
+                resultDiv.innerHTML = '<strong>🔥 Koneksi Gagal:</strong> Pastikan Server Proxy (server.js) berjalan di port 3000.';
+            } finally {
+                document.getElementById('promptInput').disabled = false;
+                document.querySelector('button').disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
