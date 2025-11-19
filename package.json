@@ -1,14 +1,11 @@
 {
-  "name": "gemini-proxy-app",
+  "name": "gemini-vercel-app",
   "version": "1.0.0",
-  "description": "Proxy server for Gemini API",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "description": "Gemini API with Vercel Serverless Function",
   "dependencies": {
-    "@google/genai": "^0.15.0",
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "@google/genai": "^0.15.0"
+  },
+  "scripts": {
+    "start": "echo 'This project runs on Vercel, no local start needed for serverless function' && exit 1"
   }
 }
