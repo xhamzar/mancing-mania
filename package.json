@@ -2,7 +2,7 @@
   "name": "gemini-vercel-app",
   "version": "1.0.0",
   "description": "Gemini API with Vercel Serverless Function",
-  "type": "module",  <-- TAMBAHKAN BARIS INI
+  "type": "module",  
   "dependencies": {
     "@google/genai": "^0.15.0"
   },
